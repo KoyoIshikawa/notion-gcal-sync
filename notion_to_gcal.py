@@ -26,8 +26,8 @@ def get_notion_events():
     for result in data["results"]:
         properties = result["properties"]
         
-        title = properties["名前"]["title"][0]["text"]["content"]
-        start_date = properties["日付"]["date"]["start"]
+        title = properties["作業名"]["title"][0]["text"]["content"]
+        start_date = properties["実行日"]["date"]["start"]
 
         events.append({
             "summary": title,
