@@ -26,8 +26,21 @@ def get_notion_events():
     for result in data["results"]:
         properties = result["properties"]
         
-        title = properties["作業名"]["title"][0]["text"]["content"]
-        start_date = properties["実行日"]["date"]["start"]
+        # デバッグ用に Notion のレスポンスを表示
+        print(json.dumps(properties, indent=2, ensure_ascii=False))
+
+        # "作業名" フィールドが存在し、title にデータがあるか確認
+        title = "No title"
+        if "作業名" in properties and "title" in properties["作業名"]:
+            title_list = properties["作業名"]["title"]
+            if title_list:  # title_list が空でない場合
+                title = title_list[0]["text"]["content"]
+
+        # "日付" フィールドがあるか確認
+        start_date = properties["日付"]["date"]["start"] if "日付" in properties and properties["日付"]["date"] else None
+        if not start_date:
+            print("⚠️ Warning: 日付フィールドが空です。スキップします。")
+            continue  # スキップする
 
         events.append({
             "summary": title,
